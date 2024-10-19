@@ -268,7 +268,7 @@ void User :: login(){
     cin>>password;
     vector<string> words_in_a_row;
     string line_in_csv,word;
-    fstream file("all_users_data.csv",ios::in);
+    fstream file("users_data.csv",ios::in);
     int count=0;
     if(file.is_open()){
         while(getline(file,line_in_csv)){
@@ -330,7 +330,7 @@ void User :: login(){
 void User :: see_all_books(string id){
     information.clear();
     cout<<"In the data below, 0 signifies that the book is not issued and 1 means that the book is issued.\n";
-    read_file("all_books_data.csv");
+    read_file("books_data.csv");
     printdata(information);
     information.clear();
 }
@@ -351,7 +351,7 @@ void User :: issue_book(string id,string bookname,string type_user){
             cout<<"You cant issue more than 5 books !\n\n";
         }
         else{
-            read_file("all_books_data.csv");
+            read_file("books_data.csv");
             for(int i=0;i<information.size();i++){
                 if(information[i][0]==bookname && information[i][4]=="0"){
                     fl=1;
@@ -368,12 +368,12 @@ void User :: issue_book(string id,string bookname,string type_user){
                 }
             }
             if(fl==0) cout<<"Book not available\n";
-            write_file(information,"all_books_data.csv");
+            write_file(information,"books_data.csv");
             information.clear();
         }
     }
     if(type_user=="2"){
-        read_file("all_books_data.csv");
+        read_file("books_data.csv");
         for(int i=0;i<information.size();i++){
             if(information[i][0]==bookname && information[i][4]=="0"){
                 fl=1;
@@ -390,7 +390,7 @@ void User :: issue_book(string id,string bookname,string type_user){
             }
         }
         if(fl==0) cout<<"Book not available\n";
-        write_file(information,"all_books_data.csv");
+        write_file(information,"books_data.csv");
         information.clear();
     }
 }
@@ -405,11 +405,11 @@ void User :: return_book(string id,string isbncode){
             cout<<"Book was issued by you and is now being returned\n";
             write_file(information,"issued_books_data.csv");
             information.clear();
-            read_file("all_books_data.csv");
+            read_file("books_data.csv");
             for(int i=0;i<information.size();i++){
                 if(information[i][3]==isbncode) information[i][4]="0";
             }
-            write_file(information,"all_books_data.csv");
+            write_file(information,"books_data.csv");
             break;
         }
     }
@@ -438,7 +438,7 @@ void User :: see_issued_books(string id){
 void User :: check_available(string id,string bookname){
     information.clear();
     int fl=0;
-    read_file("all_books_data.csv");
+    read_file("books_data.csv");
     int count=1;
     for(int i=0;i<information.size();i++){
         if(information[i][0]==bookname && information[i][4]=="0"){
@@ -528,7 +528,7 @@ void Book :: Show_duedate(string isbn){
     }
     information.clear();
     int days=30;
-    read_file("all_users_data.csv");
+    read_file("users_data.csv");
     for(int i=0;i<information.size();i++){
         if(information[i][1]==uid){
             if(information[i][3]=="1")
@@ -648,7 +648,7 @@ void Librarian :: display_lib_menu(string id){
 
 void Librarian :: see_all_users(string id){
     information.clear();
-    read_file("all_users_data.csv");
+    read_file("users_data.csv");
     cout<<"Below are all the users. 1 at the end signifies a student, 2 means a professor and 3 means a librarian \n\n";
     cout<<"The data is given in the form of student,username,type of user.\n\n";
     printdata_notpassword(information);
@@ -656,7 +656,7 @@ void Librarian :: see_all_users(string id){
 }
 void Librarian :: see_all_books(string id){
     information.clear();
-    read_file("all_books_data.csv");
+    read_file("books_data.csv");
     cout<<"Below are all the books. 1 at the end signifies a student, 2 means a professor and 3 means a librarian \n\n";
     cout<<"The data is given in the form of book name,author,pubisher,isbn number,and is_issued(1 if book is issued).\n\n";
     printdata(information);
@@ -674,7 +674,7 @@ void Librarian :: add_user(string id){
     cin>>_password;
     cout<<"Enter type of the user : 1 if student, 2 if professor, 3 if librarian : ";
     cin>>_type;
-    fstream fout("all_users_data.csv",ios::out | ios::app);
+    fstream fout("users_data.csv",ios::out | ios::app);
     fout<<name<<","<<_id<<","<<_password<<","<<_type<<'\n';
     cout<<"New user has been added.\n";
 }
@@ -690,7 +690,7 @@ void Librarian :: add_book(string id){
     cin>>isbn;
     cout<<"Enter name of publisher : ";
     cin>>publisher;
-    fstream fout("all_books_data.csv",ios::out | ios::app);
+    fstream fout("books_data.csv",ios::out | ios::app);
     fout<<title<<","<<author<<","<<isbn<<","<<publisher<<",0"<<'\n';
     cout<<"New book has been added.\n";
 }
@@ -700,7 +700,7 @@ void Librarian :: delete_book(string id){
     cin>>isbnno;
     information.clear();
     int found=0;
-    read_file("all_books_data.csv");
+    read_file("books_data.csv");
     for(int i=0;i<information.size();i++){
         if(information[i][3]==isbnno){
             found=1;
@@ -708,7 +708,7 @@ void Librarian :: delete_book(string id){
             break;
         }
     }
-    write_file(information,"all_books_data.csv");
+    write_file(information,"books_data.csv");
     information.clear();
     read_file("issued_books_data.csv");
     for(int i=0;i<information.size();i++){
@@ -727,7 +727,7 @@ void Librarian :: delete_user(string id){
     cin>>uid;
     information.clear();
     int found=0;
-    read_file("all_users_data.csv");
+    read_file("users_data.csv");
     for(int i=0;i<information.size();i++){
         if(information[i][1]==uid){
             found=1;
@@ -735,7 +735,7 @@ void Librarian :: delete_user(string id){
             break;
         }
     }
-    write_file(information,"all_users_data.csv");
+    write_file(information,"users_data.csv");
     information.clear();
     vector<string> isbns;
     read_file("issued_books_data.csv");
@@ -749,7 +749,7 @@ void Librarian :: delete_user(string id){
     write_file(information,"issued_books_data.csv");
     information.clear();
 
-    read_file("all_books_data.csv");
+    read_file("books_data.csv");
     for(int i=0;i<information.size();i++){
         for(int j=0;j<isbns.size();j++){
             if(isbns[j]==information[i][3]){
@@ -757,7 +757,7 @@ void Librarian :: delete_user(string id){
             }
         }
     }
-    write_file(information,"all_books_data.csv");
+    write_file(information,"books_data.csv");
     if(found==0) cout<<"User not found.\n";
 }
 void Librarian :: update_user(string id){
@@ -771,7 +771,7 @@ void Librarian :: update_user(string id){
     cin>>c;
     information.clear();
     int fl=0;
-    read_file("all_users_data.csv");
+    read_file("users_data.csv");
     for(int i=0;i<information.size();i++){
         if(information[i][1]==upid){
             fl=1;
@@ -792,7 +792,7 @@ void Librarian :: update_user(string id){
         }
     }
     cout<<"User updated\n";
-    write_file(information,"all_users_data.csv");
+    write_file(information,"users_data.csv");
     information.clear();
     if(fl==0) cout<<"User was not found.\n\n";
 }
@@ -809,7 +809,7 @@ void Librarian :: update_book(string id){
     information.clear();
     int fl=0;
     string new_field;
-    read_file("all_books_data.csv");
+    read_file("books_data.csv");
     for(int i=0;i<information.size();i++){
         if(information[i][3]==isbn_no){
             fl=1;
@@ -831,7 +831,7 @@ void Librarian :: update_book(string id){
             break;
         }
     }
-    write_file(information,"all_books_data.csv");
+    write_file(information,"books_data.csv");
     information.clear();
     
     read_file("issued_books_data.csv");
@@ -862,7 +862,7 @@ void Librarian :: see_issued_to_user(string id,string uid){
     information.clear();
     if(isbns.size()==0) cout<<"No book is issued to this user.\n\n";
     else{
-        read_file("all_books_data.csv");
+        read_file("books_data.csv");
         for(int d=0;d<isbns.size();d++){
             for(int i=0;i<information.size();i++){
                 if(information[i][3]==isbns[d]){
